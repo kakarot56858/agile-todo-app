@@ -4,11 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student To-Do List</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 500px; margin: 40px auto; padding: 0 16px; }
+    h1 { text-align: center; }
+    input { padding: 8px; margin: 4px 0; }
+    button { padding: 8px 12px; cursor: pointer; }
+    ul { list-style: none; padding: 0; }
+    li { display: flex; justify-content: space-between; align-items: center; padding: 8px; border-bottom: 1px solid #ccc; }
+    .done { text-decoration: line-through; color: gray; }
+  </style>
 </head>
 <body>
   <h1>Student To-Do List</h1>
 
   <input type="text" id="taskInput" placeholder="Enter a task">
+  <input type="date" id="dueDate">
   <button onclick="addTask()">Add Task</button>
 
   <ul id="taskList"></ul>
@@ -16,6 +26,7 @@
   <script>
     function addTask() {
       var input = document.getElementById("taskInput");
+      var dateInput = document.getElementById("dueDate");
       var text = input.value.trim();
 
       if (text === "") {
@@ -24,19 +35,26 @@
       }
 
       var li = document.createElement("li");
-      li.textContent = text;
-      li.style.cursor = "pointer";
 
-      li.onclick = function () {
-        if (li.style.textDecoration === "line-through") {
-          li.style.textDecoration = "none";
-        } else {
-          li.style.textDecoration = "line-through";
-        }
+      var span = document.createElement("span");
+      span.textContent = text + (dateInput.value ? " (due: " + dateInput.value + ")" : "");
+      span.style.cursor = "pointer";
+      span.onclick = function () {
+        span.classList.toggle("done");
       };
 
+      var del = document.createElement("button");
+      del.textContent = "Delete";
+      del.onclick = function () {
+        li.remove();
+      };
+
+      li.appendChild(span);
+      li.appendChild(del);
       document.getElementById("taskList").appendChild(li);
+
       input.value = "";
+      dateInput.value = "";
     }
   </script>
 </body>
